@@ -11,6 +11,11 @@ namespace DImage
     {
         public static void DImage(string filepath, Encoding encoding, string output)
         {
+            var path = Path.Combine(AppContext.BaseDirectory, output);
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
             var header = new byte[] { 0x50, 0x4B, 0x03, 0x04 };
             using (var stream = File.OpenRead(filepath))
             {
@@ -37,12 +42,12 @@ namespace DImage
                     }
                     index++;
                 } while (!goNext);
+                //将原始图片也导出
+                var pngdata = new byte[index];
+                stream.Seek(0, SeekOrigin.Begin);
+                stream.Read(pngdata, 0, pngdata.Length);
+                File.WriteAllBytes(Path.Combine(path, Path.GetFileNameWithoutExtension(filepath) + "_origin.png"), pngdata);
                 stream.Seek(index, SeekOrigin.Begin);
-                var path = Path.Combine(AppContext.BaseDirectory, output);
-                if (!Directory.Exists(path))
-                {
-                    Directory.CreateDirectory(path);
-                }
                 using (MemoryStream ms = new MemoryStream())
                 {
                     stream.CopyTo(ms);

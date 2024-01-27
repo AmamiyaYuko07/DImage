@@ -15,12 +15,9 @@ var outputOption = new Option<string>(name: "--output", description: "Output Fil
 outputOption.AddAlias("-o");
 var filesOption = new Option<string[]>(name: "--file", description: "Target File") { IsRequired = true };
 filesOption.AddAlias("-f");
-var passwordOption = new Option<string>(name: "--password", description: "Password");
-passwordOption.AddAlias("-p");
 decodeCommand.AddOption(imageOption);
 decodeCommand.AddOption(encodeOption);
 decodeCommand.AddOption(outputOption);
-decodeCommand.AddOption(passwordOption);
 decodeCommand.SetHandler((image, encode, output) =>
 {
     if (!File.Exists(image))
@@ -36,7 +33,6 @@ encodeCommand.AddOption(imageOption);
 encodeCommand.AddOption(filesOption);
 encodeCommand.AddOption(encodeOption);
 encodeCommand.AddOption(outputOption);
-encodeCommand.AddOption(passwordOption);
 encodeCommand.SetHandler((image, files, output, encode) =>
 {
     if (!File.Exists(image))
